@@ -29,9 +29,10 @@
                 {% for comp in grouped_complaints[cat.category] %}
                 <div class="complaint-card">
                     <div class="student-info">
-                        {{ comp.name }} (Roll No: {{ comp.roll_no }}) - {{ comp.department }}
+                        <strong>{{ comp.name }}</strong> (Roll No: {{ comp.roll_no }})<br>
+                        <small style="color: #666;">Department: {{ comp.department }} | Email: {{ comp.email if comp.email else 'N/A' }}</small>
                     </div>
-                    <div class="complaint-text">
+                    <div class="complaint-text" style="margin-top: 10px;">
                         {{ comp.complaint }}
                     </div>
                 </div>

@@ -15,12 +15,18 @@ def init_db():
         CREATE TABLE IF NOT EXISTS complaints (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
+            email TEXT,
             roll_no TEXT NOT NULL,
             department TEXT NOT NULL,
             category TEXT NOT NULL,
             complaint TEXT NOT NULL
         )
     ''')
+    try:
+        c.execute("ALTER TABLE complaints ADD COLUMN email TEXT")
+    except sqlite3.OperationalError:
+        pass
+
     c.execute('''
         CREATE TABLE IF NOT EXISTS students (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,6 +35,22 @@ def init_db():
             password TEXT NOT NULL
         )
     ''')
+    
+    # Seed data if table is empty
+    c.execute("SELECT COUNT(*) FROM complaints")
+    if c.fetchone()[0] == 0:
+        seed_complaints = [
+            ('Anjali Dindure', 'anjali@example.com', '101', 'Computer Science', 'Hostel', 'The Wi-Fi in the hostel is very slow and disconnects frequently.'),
+            ('Vishnavi Bura', 'vishnavi@example.com', '102', 'Computer Science', 'Academics', 'Need more reference books for the Machine Learning course in the library.')
+        ]
+        c.executemany('INSERT INTO complaints (name, email, roll_no, department, category, complaint) VALUES (?, ?, ?, ?, ?, ?)', seed_complaints)
+        
+        seed_students = [
+            ('Anjali Dindure', 'anjali@example.com', 'password123'),
+            ('Vishnavi Bura', 'vishnavi@example.com', 'password123')
+        ]
+        c.executemany('INSERT OR IGNORE INTO students (name, email, password) VALUES (?, ?, ?)', seed_students)
+
     conn.commit()
     conn.close()
 
@@ -102,10 +124,12 @@ def student():
         category = request.form.get('category')
         complaint = request.form.get('complaint')
         
+        email = session.get('student_email', '')
+        
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
-        c.execute('INSERT INTO complaints (name, roll_no, department, category, complaint) VALUES (?, ?, ?, ?, ?)',
-                  (name, roll_no, department, category, complaint))
+        c.execute('INSERT INTO complaints (name, email, roll_no, department, category, complaint) VALUES (?, ?, ?, ?, ?, ?)',
+                  (name, email, roll_no, department, category, complaint))
         conn.commit()
         conn.close()
         return render_template('student.html', success=True)
