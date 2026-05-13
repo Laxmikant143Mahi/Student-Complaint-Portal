@@ -13,6 +13,11 @@
     </header>
 
     <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
+            <span style="color: var(--pink-dark); font-weight: bold;">Welcome, {{ session.get('student_name', 'Student') }}</span>
+            <a href="{{ url_for('student_logout') }}" class="btn" style="padding: 5px 15px; font-size: 0.9rem;">Logout</a>
+        </div>
+
         {% if success %}
         <div class="success-message">
             Your complaint has been successfully submitted. We will look into it shortly.
@@ -24,7 +29,7 @@
         <form action="{{ url_for('student') }}" method="POST">
             <div class="form-group">
                 <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                <input type="text" id="name" name="name" required placeholder="Enter your full name" value="{{ session.get('student_name', '') }}">
             </div>
             
             <div class="form-group">

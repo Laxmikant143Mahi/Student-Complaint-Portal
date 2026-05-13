@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration - Student Complaint Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h3 style="margin: 0; color: #555; font-size: 1.2rem; font-weight: normal; margin-bottom: 5px;">N.K. Orchid College of Engineering, Solapur</h3>
+        <h1>Student Registration</h1>
+    </header>
+
+    <div class="container">
+        {% if error %}
+        <div class="error-message" style="color: red; text-align: center; margin-bottom: 15px;">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        <h2 style="text-align: center; color: var(--pink-dark); margin-top: 0;">Create an Account</h2>
+        
+        <form action="{{ url_for('student_register') }}" method="POST">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Enter a password">
+            </div>
+            
+            <div style="text-align: center;">
+                <button type="submit" class="btn">Register</button>
+            </div>
+        </form>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <p>Already have an account? <a href="{{ url_for('student_login') }}" style="color: var(--pink-dark); text-decoration: none; font-weight: 600;">Login here</a></p>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{{ url_for('index') }}" class="back-link">&larr; Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

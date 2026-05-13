@@ -21,6 +21,14 @@ def init_db():
             complaint TEXT NOT NULL
         )
     ''')
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS students (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
+        )
+    ''')
     conn.commit()
     conn.close()
 
@@ -31,14 +39,68 @@ init_db()
 def index():
     return render_template('index.html')
 
+@app.route('/student_register', methods=['GET', 'POST'])
+def student_register():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        try:
+            c.execute('INSERT INTO students (name, email, password) VALUES (?, ?, ?)',
+                      (name, email, password))
+            conn.commit()
+        except sqlite3.IntegrityError:
+            conn.close()
+            return render_template('student_register.html', error="Email already exists.")
+        conn.close()
+        
+        return redirect(url_for('student_login'))
+    return render_template('student_register.html')
+
+@app.route('/student_login', methods=['GET', 'POST'])
+def student_login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        conn = sqlite3.connect(DB_FILE)
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        c.execute('SELECT * FROM students WHERE email = ? AND password = ?', (email, password))
+        student = c.fetchone()
+        conn.close()
+        
+        if student:
+            session['student_logged_in'] = True
+            session['student_name'] = student['name']
+            session['student_email'] = student['email']
+            return redirect(url_for('student'))
+        else:
+            return render_template('student_login.html', error="Invalid email or password")
+            
+    return render_template('student_login.html')
+
+@app.route('/student_logout')
+def student_logout():
+    session.pop('student_logged_in', None)
+    session.pop('student_name', None)
+    session.pop('student_email', None)
+    return redirect(url_for('index'))
+
 @app.route('/student', methods=['GET', 'POST'])
 def student():
+    if not session.get('student_logged_in'):
+        return redirect(url_for('student_login'))
+        
     if request.method == 'POST':
-        name = request.form['name']
-        roll_no = request.form['roll_no']
-        department = request.form['department']
-        category = request.form['category']
-        complaint = request.form['complaint']
+        name = request.form.get('name')
+        roll_no = request.form.get('roll_no')
+        department = request.form.get('department')
+        category = request.form.get('category')
+        complaint = request.form.get('complaint')
         
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
