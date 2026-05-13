@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Complaint Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h3 style="margin: 0; color: #555; font-size: 1.2rem; font-weight: normal; margin-bottom: 5px;">N.K. Orchid College of Engineering, Solapur</h3>
+        <h1>Student Complaint Portal</h1>
+    </header>
+
+    <div class="container" style="text-align: center;">
+        <h2>Welcome to the Portal</h2>
+        <p>Please select your portal to continue.</p>
+        
+        <div class="options">
+            <a href="{{ url_for('student') }}" class="btn">Student Login</a>
+            <a href="{{ url_for('principal') }}" class="btn">Principal Login</a>
+        </div>
+    </div>
+</body>
+</html>

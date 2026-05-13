@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - Submit Complaint</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h3 style="margin: 0; color: #555; font-size: 1.2rem; font-weight: normal; margin-bottom: 5px;">N.K. Orchid College of Engineering, Solapur</h3>
+        <h1>Student Portal</h1>
+    </header>
+
+    <div class="container">
+        {% if success %}
+        <div class="success-message">
+            Your complaint has been successfully submitted. We will look into it shortly.
+        </div>
+        {% endif %}
+
+        <h2 style="text-align: center; color: var(--pink-dark); margin-top: 0;">Submit a Complaint</h2>
+        
+        <form action="{{ url_for('student') }}" method="POST">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+            </div>
+            
+            <div class="form-group">
+                <label for="roll_no">Roll Number</label>
+                <input type="text" id="roll_no" name="roll_no" required placeholder="Enter your roll number">
+            </div>
+            
+            <div class="form-group">
+                <label for="department">Department</label>
+                <select id="department" name="department" required>
+                    <option value="" disabled selected>Select your department</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Mechanical">Mechanical</option>
+                    <option value="Electrical">Electrical</option>
+                    <option value="Civil">Civil</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="category">Complaint Category</label>
+                <select id="category" name="category" required>
+                    <option value="" disabled selected>Select complaint category</option>
+                    <option value="Academics">Academics</option>
+                    <option value="Hostel">Hostel</option>
+                    <option value="Infrastructure">Infrastructure</option>
+                    <option value="Mess">Mess</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="complaint">Complaint Details</label>
+                <textarea id="complaint" name="complaint" required placeholder="Write exactly your complaint here..."></textarea>
+            </div>
+            
+            <div style="text-align: center;">
+                <button type="submit" class="btn">Submit Complaint</button>
+            </div>
+        </form>
+        
+        <div style="text-align: center;">
+            <a href="{{ url_for('index') }}" class="back-link">&larr; Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

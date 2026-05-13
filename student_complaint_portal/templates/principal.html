@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Principal Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h3 style="margin: 0; color: #555; font-size: 1.2rem; font-weight: normal; margin-bottom: 5px;">N.K. Orchid College of Engineering, Solapur</h3>
+        <h1>Principal Dashboard</h1>
+    </header>
+
+    <div class="container" style="max-width: 900px;">
+        <h2 style="text-align: center; color: var(--pink-dark); margin-top: 0;">Complaints Overview</h2>
+        <p style="text-align: center; margin-bottom: 30px;">
+            Complaints are prioritized based on the majority category.
+        </p>
+
+        {% if categories %}
+            {% for cat in categories %}
+            <div class="category-section">
+                <div class="category-title">
+                    <span>Priority: {{ cat.category }}</span>
+                    <span><small>Total Complaints: {{ cat.count }}</small></span>
+                </div>
+                
+                {% for comp in grouped_complaints[cat.category] %}
+                <div class="complaint-card">
+                    <div class="student-info">
+                        {{ comp.name }} (Roll No: {{ comp.roll_no }}) - {{ comp.department }}
+                    </div>
+                    <div class="complaint-text">
+                        {{ comp.complaint }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <div style="text-align: center; padding: 40px; background: rgba(255,255,255,0.5); border-radius: 15px;">
+                <h3>No complaints submitted yet.</h3>
+            </div>
+        {% endif %}
+        
+        <div style="text-align: center;">
+            <a href="{{ url_for('index') }}" class="back-link" style="margin-right: 20px;">&larr; Back to Home</a>
+            <a href="{{ url_for('logout') }}" class="back-link" style="color: #d9534f;">Logout</a>
+        </div>
+    </div>
+</body>
+</html>
