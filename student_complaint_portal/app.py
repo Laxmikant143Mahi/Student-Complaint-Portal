@@ -5,7 +5,8 @@ import os
 app = Flask(__name__)
 app.secret_key = 'complaint_portal_secret'
 
-DB_FILE = 'complaints.db'
+# Use /tmp directory for SQLite database in Vercel serverless environment (read-only filesystem)
+DB_FILE = '/tmp/complaints.db' if os.environ.get('VERCEL') else 'complaints.db'
 
 def init_db():
     conn = sqlite3.connect(DB_FILE)
