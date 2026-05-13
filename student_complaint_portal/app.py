@@ -24,6 +24,9 @@ def init_db():
     conn.commit()
     conn.close()
 
+# In Vercel, the app is imported as a module, so we must initialize the DB here
+init_db()
+
 @app.route('/')
 def index():
     return render_template('index.html')
